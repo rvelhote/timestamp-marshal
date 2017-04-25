@@ -42,7 +42,7 @@ func TestUnix_MarshalJSON(t *testing.T) {
     actual := string(marshaled)
 
     if actual != expected {
-        t.Error("Expected %s got %s", expected, actual)
+        t.Errorf("Expected %s got %s", expected, actual)
     }
 }
 
