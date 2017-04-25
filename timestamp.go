@@ -40,13 +40,13 @@ func (t *Unix) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is invoked when a JSON string representation is being converted into an object. For this data type,
 // the unmarshaling will turn a Unix Timestamp into its equivalent time.Time object.
-func (u *Unix) UnmarshalJSON(b []byte) error {
+func (t *Unix) UnmarshalJSON(b []byte) error {
     timestamp, err := strconv.ParseInt(string(b), 10, 64)
 
     if err != nil {
         return err
     }
 
-    u.Time = time.Unix(timestamp, 0)
+    t.Time = time.Unix(timestamp, 0)
     return nil
 }
