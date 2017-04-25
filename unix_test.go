@@ -26,7 +26,6 @@ import (
     "testing"
     "time"
     "encoding/json"
-    "bytes"
 )
 
 func TestUnix_MarshalJSON(t *testing.T) {
@@ -50,14 +49,18 @@ func TestUnix_MarshalJSON(t *testing.T) {
 func TestUnix_UnmarshalJSON(t *testing.T) {
     str := `1492855872`
 
-    var c Unix
-    err := json.NewDecoder(bytes.NewBufferString(str)).Decode(&c)
+    c := Unix{}
+    err := json.Unmarshal([]byte(str), &c)
 
     if err != nil {
         t.Error(err)
     }
 
-    expected, _ := time.Parse(time.RFC3339, "2017-04-22T10:11:12+00:00")
+    expected, err := time.Parse(time.RFC3339, "2017-04-22T10:11:12+00:00")
+
+    if err != nil {
+        t.Errorf("Got unexpected %s when parsing date", err)
+    }
 
     if c.Unix() != expected.Unix() {
         t.Errorf("Expected %d got %d", expected.Unix(), c.Unix())
@@ -66,11 +69,11 @@ func TestUnix_UnmarshalJSON(t *testing.T) {
 
 func TestUnix_UnmarshalBadJSON(t *testing.T) {
     str := `these pretzels are making me thirsty`
+    c := Unix{}
 
-    var c Unix
-    err := json.NewDecoder(bytes.NewBufferString(str)).Decode(&c)
-
-    if err == nil {
+    if err := json.Unmarshal([]byte(str), &c); err == nil {
         t.Error("There should be an error when unmarshaling!")
+    } else {
+        t.Log(err)
     }
 }
