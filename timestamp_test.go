@@ -23,57 +23,57 @@ package timestamp
  * SOFTWARE.
  */
 import (
-    "testing"
-    "time"
-    "encoding/json"
+	"encoding/json"
+	"testing"
+	"time"
 )
 
 func TestUnix_MarshalJSON(t *testing.T) {
-    parsed, _ := time.Parse(time.RFC3339, "2017-04-22T10:11:12+00:00")
-    obj := &Unix{parsed}
+	parsed, _ := time.Parse(time.RFC3339, "2017-04-22T10:11:12+00:00")
+	obj := &Unix{parsed}
 
-    marshaled, err := json.Marshal(obj)
+	marshaled, err := json.Marshal(obj)
 
-    if err != nil {
-        t.Error(err)
-    }
+	if err != nil {
+		t.Error(err)
+	}
 
-    expected := `1492855872`
-    actual := string(marshaled)
+	expected := `1492855872`
+	actual := string(marshaled)
 
-    if actual != expected {
-        t.Errorf("Expected %s got %s", expected, actual)
-    }
+	if actual != expected {
+		t.Errorf("Expected %s got %s", expected, actual)
+	}
 }
 
 func TestUnix_UnmarshalJSON(t *testing.T) {
-    str := `1492855872`
+	str := `1492855872`
 
-    c := Unix{}
-    err := json.Unmarshal([]byte(str), &c)
+	c := Unix{}
+	err := json.Unmarshal([]byte(str), &c)
 
-    if err != nil {
-        t.Error(err)
-    }
+	if err != nil {
+		t.Error(err)
+	}
 
-    expected, err := time.Parse(time.RFC3339, "2017-04-22T10:11:12+00:00")
+	expected, err := time.Parse(time.RFC3339, "2017-04-22T10:11:12+00:00")
 
-    if err != nil {
-        t.Errorf("Got unexpected %s when parsing date", err)
-    }
+	if err != nil {
+		t.Errorf("Got unexpected %s when parsing date", err)
+	}
 
-    if c.Unix() != expected.Unix() {
-        t.Errorf("Expected %d got %d", expected.Unix(), c.Unix())
-    }
+	if c.Unix() != expected.Unix() {
+		t.Errorf("Expected %d got %d", expected.Unix(), c.Unix())
+	}
 }
 
 func TestUnix_UnmarshalBadJSON(t *testing.T) {
-    str := `these pretzels are making me thirsty`
-    c := Unix{}
+	str := `these pretzels are making me thirsty`
+	c := Unix{}
 
-    if err := json.Unmarshal([]byte(str), &c); err == nil {
-        t.Error("There should be an error when unmarshaling!")
-    } else {
-        t.Log(err)
-    }
+	if err := json.Unmarshal([]byte(str), &c); err == nil {
+		t.Error("There should be an error when unmarshaling!")
+	} else {
+		t.Log(err)
+	}
 }

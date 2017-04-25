@@ -23,30 +23,30 @@ package timestamp
  * SOFTWARE.
  */
 import (
-    "time"
-    "strconv"
+	"strconv"
+	"time"
 )
 
 // Unix is a data type that "extends" time.Time and allows for the marshaling and unmarshaling of Unix Timestamps.
 type Unix struct {
-    time.Time
+	time.Time
 }
 
 // MarshalJSON is invoked when a object is being converted to it JSON equivalent. For this data type, the marshaling
 // will turn a time.Time object into its equivalent Unix Timestamp.
 func (t *Unix) MarshalJSON() ([]byte, error) {
-    return []byte(strconv.FormatInt(t.Time.Unix(), 10)), nil
+	return []byte(strconv.FormatInt(t.Time.Unix(), 10)), nil
 }
 
 // UnmarshalJSON is invoked when a JSON string representation is being converted into an object. For this data type,
 // the unmarshaling will turn a Unix Timestamp into its equivalent time.Time object.
 func (t *Unix) UnmarshalJSON(b []byte) error {
-    timestamp, err := strconv.ParseInt(string(b), 10, 64)
+	timestamp, err := strconv.ParseInt(string(b), 10, 64)
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    t.Time = time.Unix(timestamp, 0)
-    return nil
+	t.Time = time.Unix(timestamp, 0)
+	return nil
 }
